@@ -20,9 +20,9 @@ sig Cha extends Bebida{}
 
 //Assinatura abstrata da forma de adolar
 abstract sig formaDeAdocar{}
-{
-	one this.~comoAdocar
-}
+//{
+//	one this.~comoAdocar
+//}
 sig Adocante extends formaDeAdocar{}
 sig Acucar extends formaDeAdocar{}
 sig SemAcucar extends formaDeAdocar{}
