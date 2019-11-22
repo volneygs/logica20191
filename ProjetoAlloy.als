@@ -1,8 +1,15 @@
 module maquinaDeBebidas
 //Assinatura principal: define maquina
 sig Maquina{
-	bebidas: set Bebida
+	copos: set Copo
 }
+
+abstract sig Copo{
+	bebida: one Bebida
+}
+
+sig CopoPequeno extends Copo{}
+sig CopoGrande extends Copo{}
 
 //Assinatura abstrata de bebida, onde cada bebida deve está ligada à maquina especificamente
 abstract sig Bebida{
@@ -20,9 +27,9 @@ sig Cha extends Bebida{}
 
 //Assinatura abstrata da forma de adolar
 abstract sig formaDeAdocar{}
-//{
-//	one this.~comoAdocar
-//}
+{
+	one this.~comoAdocar
+}
 sig Adocante extends formaDeAdocar{}
 sig Acucar extends formaDeAdocar{}
 sig SemAcucar extends formaDeAdocar{}
@@ -38,11 +45,18 @@ sig SemLeite extends colocarLeite{}
 
 fact{
 Bebida = Cafe + ChocolateQuente + Cha
-all m:Maquina | some m.bebidas
+all m:Maquina | some m.copos
+all c:Copo | one c.bebida
 all b:Bebida | one b.leite
 all b:Bebida | one b.comoAdocar
-//Quantidade de instancias de Bebida é menor ou igual a quantidade das relações Maquina.bebidas
-#Bebida <= #Maquina.bebidas
+
+//Para aparecer somente uma máquina sempre, pode ser retirado
+#Maquina = 1
+
+//Quantidade de instancias de Copo é menor ou igual a quantidade das relações Maquina.copos
+#Copo <= #Maquina.copos
+//Quantidade de instancias de Bebida é menor ou igual a quantidade das relações Copo.bebida
+#Bebida <= #Copo.bebida
 //Quantidade de instancias de colocarLeite é menor ou igual a quantidade das relações Bebida.leite
 #colocarLeite <= #Bebida.leite
 //Quantidade de instancias de formaDeAdocar é menor ou igual a quantidade das relações Bebida.comoAdocar
@@ -51,4 +65,4 @@ all b:Bebida | one b.comoAdocar
 
 
 pred show[]{}
-run show for 3
+run show for 4
