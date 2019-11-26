@@ -4,6 +4,7 @@ sig Maquina{
 	copos: set Copo
 }
 
+//Assinatura abstrata de copo
 abstract sig Copo{
 	bebida: one Bebida
 }
@@ -16,9 +17,6 @@ abstract sig Bebida{
 	comoAdocar: one formaDeAdocar ,
 	leite: one colocarLeite
 }
-//{
-//	one this.~bebidas
-//}
 
 //Assinatura dos tipos de Bebida
 sig Cafe extends Bebida{}
@@ -63,6 +61,13 @@ all b:Bebida | one b.comoAdocar
 #formaDeAdocar <= #Bebida.comoAdocar
 }
 
-
 pred show[]{}
 run show for 4
+
+assert checagem{
+//Checa se toda bebida tem leite
+all b:Bebida | one b.leite and one b.comoAdocar
+//Checa se existe algum copo sem bebida
+!one b:Copo | #b.bebida = 0
+}
+check checagem for 10
