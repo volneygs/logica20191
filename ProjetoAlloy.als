@@ -12,7 +12,7 @@ abstract sig Copo{
 sig CopoPequeno extends Copo{}
 sig CopoGrande extends Copo{}
 
-//Assinatura abstrata de bebida, onde cada bebida deve está ligada à maquina especificamente
+//Assinatura abstrata de bebida
 abstract sig Bebida{
 	comoAdocar: one formaDeAdocar ,
 	leite: one colocarLeite
@@ -34,15 +34,21 @@ abstract sig colocarLeite{}
 sig ComLeite extends colocarLeite{}
 sig SemLeite extends colocarLeite{}
 
-
+//Onde todos os fatos estao definidos
 fact{
+//O conjunto de bebidas e formado pela uniao de todos os cafes, chocolates quentes e chas
 Bebida = Cafe + ChocolateQuente + Cha
+
+//Cada maquina possui pelo menos um copo
 all m:Maquina | some m.copos
+//Cada Copo possui exatamente uma bebida
 all c:Copo | one c.bebida
+//Cada Bebida possui exatamente uma definicao sobre adicao do leite
 all b:Bebida | one b.leite
+//Cada bebida possui exatamente uma definicao de forma de adocar
 all b:Bebida | one b.comoAdocar
 
-//Para aparecer somente uma máquina sempre, pode ser retirado
+//Para aparecer somente uma máquina sempre, pode ser retirada tal restricao, caso faca sentido
 #Maquina = 1
 
 //Quantidade de instancias de Copo é menor ou igual a quantidade das relações Maquina.copos
@@ -55,13 +61,19 @@ all b:Bebida | one b.comoAdocar
 #formaDeAdocar <= #Bebida.comoAdocar
 }
 
-pred show[]{}
-run show for 3
-
-assert checagem{
 //Checa se toda bebida tem exatamente uma definicao sobre leite e uma definicao de como adocar
+assert checaDefinicaoDeLeiteEComoAdocar{
 all b:Bebida | one b.leite and one b.comoAdocar
+}
+
 //Checa se existe algum copo sem bebida
+assert checaSeExisteCopoSemBebida{
 !one b:Copo | #b.bebida = 0
 }
-check checagem for 10
+
+check checaDefinicaoDeLeiteEComoAdocar for 5
+check checaSeExisteCopoSemBebida for 5
+
+pred show[]{
+}
+run show for 3
