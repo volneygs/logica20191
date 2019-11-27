@@ -23,20 +23,14 @@ sig Cafe extends Bebida{}
 sig ChocolateQuente extends Bebida{}
 sig Cha extends Bebida{}
 
-//Assinatura abstrata da forma de adolar
+//Assinatura abstrata para definir sobre forma de adocar
 abstract sig formaDeAdocar{}
-{
-	one this.~comoAdocar
-}
 sig Adocante extends formaDeAdocar{}
 sig Acucar extends formaDeAdocar{}
 sig SemAcucar extends formaDeAdocar{}
 
-//Assinatura abstrata para 
+//Assinatura abstrata para definir sobre adicao de leite
 abstract sig colocarLeite{}
-//{
-//	one this.~leite
-//}
 sig ComLeite extends colocarLeite{}
 sig SemLeite extends colocarLeite{}
 
@@ -62,10 +56,10 @@ all b:Bebida | one b.comoAdocar
 }
 
 pred show[]{}
-run show for 4
+run show for 3
 
 assert checagem{
-//Checa se toda bebida tem leite
+//Checa se toda bebida tem exatamente uma definicao sobre leite e uma definicao de como adocar
 all b:Bebida | one b.leite and one b.comoAdocar
 //Checa se existe algum copo sem bebida
 !one b:Copo | #b.bebida = 0
