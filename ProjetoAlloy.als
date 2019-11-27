@@ -1,4 +1,6 @@
 module maquinaDeBebidas
+
+--ASSINATURAS--
 //Assinatura principal: define maquina
 sig Maquina{
 	copos: set Copo
@@ -34,23 +36,38 @@ abstract sig colocarLeite{}
 sig ComLeite extends colocarLeite{}
 sig SemLeite extends colocarLeite{}
 
-//Onde todos os fatos estao definidos
-fact{
+--FATOS--
 //O conjunto de bebidas e formado pela uniao de todos os cafes, chocolates quentes e chas
+fact conjuntoBebidas{
 Bebida = Cafe + ChocolateQuente + Cha
+}
 
 //Cada maquina possui pelo menos um copo
+fact quantCopos{
 all m:Maquina | some m.copos
+}
+
 //Cada Copo possui exatamente uma bebida
+fact quantBebidasPorCopo{
 all c:Copo | one c.bebida
+}
+
 //Cada Bebida possui exatamente uma definicao sobre adicao do leite
+fact quantDefLeitePorBebida{
 all b:Bebida | one b.leite
+}
+
 //Cada bebida possui exatamente uma definicao de forma de adocar
+fact quantDefComoAdocarPorBebida{
 all b:Bebida | one b.comoAdocar
+}
 
-//Para aparecer somente uma máquina sempre, pode ser retirada tal restricao, caso faca sentido
+//So existe uma máquina
+fact quantMaquina{
 #Maquina = 1
+}
 
+fact quantInstancias{
 //Quantidade de instancias de Copo é menor ou igual a quantidade das relações Maquina.copos
 #Copo <= #Maquina.copos
 //Quantidade de instancias de Bebida é menor ou igual a quantidade das relações Copo.bebida
@@ -61,6 +78,7 @@ all b:Bebida | one b.comoAdocar
 #formaDeAdocar <= #Bebida.comoAdocar
 }
 
+--ASSERTS--
 //Checa se toda bebida tem exatamente uma definicao sobre leite e uma definicao de como adocar
 assert checaDefinicaoDeLeiteEComoAdocar{
 all b:Bebida | one b.leite and one b.comoAdocar
@@ -71,6 +89,7 @@ assert checaSeExisteCopoSemBebida{
 !one b:Copo | #b.bebida = 0
 }
 
+--EXECUCOES--
 check checaDefinicaoDeLeiteEComoAdocar for 5
 check checaSeExisteCopoSemBebida for 5
 
